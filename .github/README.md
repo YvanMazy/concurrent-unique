@@ -6,15 +6,15 @@ of identifiers, whatever their type or security and performance requirements.
 
 **Summary**:
 
-- [⚙️ How it works](#-how-does-it-work)
+- [⚙️ How it works](#%EF%B8%8F-how-does-it-work)
     - [🏭 RandomGeneratorSupplier](#-randomgeneratorsupplier)
-    - [🗂️ Generator Interfaces](#-generator-interfaces)
+    - [🗂️ Generator Interfaces](#%EF%B8%8F-generator-interfaces)
         - [🆔 UUIDGenerator](#-uuidgenerator)
         - [🔤 AlphanumericGenerator](#-alphanumericgenerator)
         - [🔢 IntegerIncrementerGenerator & LongIncrementerGenerator](#-integerincrementergenerator--longincrementergenerator)
-        - [🗑️ EmptyGenerator](#-emptygenerator)
+        - [🗑️ EmptyGenerator](#%EF%B8%8F-emptygenerator)
     - [🔒 Make Verified Generators](#-make-verified-generators)
-    - [🛠️ Make Custom Generators](#-make-custom-generators)
+    - [🛠️ Make Custom Generators](#%EF%B8%8F-make-custom-generators)
         - [🔓 Make Custom Verified Generator](#-make-custom-verified-generator)
 - [📄 License](#-license)
 
