@@ -60,13 +60,13 @@ provide a custom RandomGenerator or use the default implementations. Here's how 
 
 ```java
 // Using ThreadLocalRandom
-final RandomGeneratorSupplier supplier = RandomGeneratorSupplier.build(RandomGeneratorSupplier.Type.THREAD_LOCAL);
+RandomGeneratorSupplier.build(RandomGeneratorSupplier.Type.THREAD_LOCAL);
 // Using custom sequential random (not thread-safe)
-final RandomGeneratorSupplier supplier = RandomGeneratorSupplier.build(RandomGeneratorSupplier.Type.FAST_SEQUENTIAL);
+RandomGeneratorSupplier.build(RandomGeneratorSupplier.Type.FAST_SEQUENTIAL);
 // Using SecureRandom
-final RandomGeneratorSupplier supplier = RandomGeneratorSupplier.build(RandomGeneratorSupplier.Type.SECURE);
+RandomGeneratorSupplier.build(RandomGeneratorSupplier.Type.SECURE);
 // Using custom RandomGenerator
-final RandomGeneratorSupplier supplier = RandomGeneratorSupplier.build(RandomGenerator.of("L32X64MixRandom"));
+RandomGeneratorSupplier.build(RandomGenerator.of("L32X64MixRandom"));
 ```
 
 ## 🗂️ Generator interfaces
@@ -94,10 +94,11 @@ final UUIDGenerator generator = UUIDGenerator.build(RandomGenerator.of("L32X64Mi
 This is an interface for building alphanumeric `java.lang.String` generators. Here are a few examples:
 
 ```java
+final RandomGeneratorSupplier.Type type = RandomGeneratorSupplier.Type.SECURE;
 // Builds a generator to generate 10-character alphanumeric strings
-final AlphanumericGenerator generator = AlphanumericGenerator.build(10, RandomGeneratorSupplier.Type.SECURE);
+final AlphanumericGenerator generator = AlphanumericGenerator.build(10, type);
 // It is possible to use the parent interface
-final UniqueGenerator<String> generator = AlphanumericGenerator.build(5, RandomGeneratorSupplier.Type.FAST_SEQUENTIAL);
+final UniqueGenerator<String> generator = AlphanumericGenerator.build(5, type);
 ```
 
 ### 🔢 IntegerIncrementerGenerator & LongIncrementerGenerator
@@ -129,11 +130,11 @@ in memory entries that have already been generated, whether concurrently or not.
 final UUIDGenerator generator = UUIDGenerator.build(RandomGeneratorSupplier.Type.FAST_SEQUENTIAL);
 // Build a concurrent verified generator with full cache
 // The parameter "5" indicates the maximum number of retries after a failure.
-final VerifiedUniqueGenerator<UUID> verifiedGenerator = new ConcurrentFullCacheGenerator<>(generator, 5);
+final UniqueGenerator<UUID> verifiedGenerator = new ConcurrentFullCacheGenerator<>(generator, 5);
 final UUID verifiedUUID = verifiedGenerator.generate();
 
 // Not thread-safe verified generator
-final VerifiedUniqueGenerator<UUID> verifiedGenerator = new SequentialFullCacheGenerator<>(generator, 5);
+final UniqueGenerator<UUID> verifiedGenerator = new SequentialFullCacheGenerator<>(generator, 5);
 ```
 
 ## 🛠️ Make custom generators
@@ -153,7 +154,8 @@ public record MyGenerator(RandomGeneratorSupplier randomGeneratorSupplier) imple
     public String generate() {
         final StringBuilder builder = new StringBuilder(GENERATED_LENGTH);
         for (int i = 0; i < GENERATED_LENGTH; i++) {
-            builder.append(CHARS.charAt(this.randomGeneratorSupplier.getRandomGenerator().nextInt(CHARS.length())));
+            final int index = this.randomGeneratorSupplier.getRandomGenerator().nextInt(CHARS.length());
+            builder.append(CHARS.charAt(index));
         }
         return builder.toString();
     }
@@ -162,8 +164,7 @@ public record MyGenerator(RandomGeneratorSupplier randomGeneratorSupplier) imple
 ```
 
 ```java
-final UniqueGenerator<String> generator =
-        new MyGenerator(RandomGeneratorSupplier.build(RandomGeneratorSupplier.Type.SECURE));
+final MyGenerator generator = new MyGenerator(RandomGeneratorSupplier.build(RandomGeneratorSupplier.Type.SECURE));
 final String generated = generator.generate();
 ```
 
