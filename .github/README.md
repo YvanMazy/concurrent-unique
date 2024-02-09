@@ -19,9 +19,39 @@ of identifiers, whatever their type or security and performance requirements.
 - [📄 License](#-license)
 
 *Note: This project is not particularly designed to be used by anyone but I have made it publicly available anyway.*
-# ⚙️ How does it work?
 
-Here are a few explanations of how the project works
+# ⚙️ How do you use it?
+
+To use the project as a dependency, you can add it using [Maven](https://maven.apache.org/)
+or [Gradle](https://gradle.org/).
+<br>**Last version**: [![Release](https://jitpack.io/v/Darkkraft/concurrent-unique.svg)](https://jitpack.io/#Darkkraft/concurrent-unique)
+
+```groovy
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation 'com.github.Darkkraft:concurrent-unique:VERSION'
+}
+```
+
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>com.github.Darkkraft</groupId>
+        <artifactId>concurrent-unique</artifactId>
+        <version>VERSION</version>
+    </dependency>
+</dependencies>
+```
 
 ## 🏭 RandomGeneratorSupplier
 
