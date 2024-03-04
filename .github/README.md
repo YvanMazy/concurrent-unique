@@ -6,7 +6,7 @@ of identifiers, whatever their type or security and performance requirements.
 
 **Summary**:
 
-- [⚙️ How it works](#%EF%B8%8F-how-do-you-use-it)
+- [⚙️ How do you use it](#%EF%B8%8F-how-do-you-use-it)
     - [🏭 RandomGeneratorSupplier](#-randomgeneratorsupplier)
     - [🗂️ Generator Interfaces](#%EF%B8%8F-generator-interfaces)
         - [🆔 UUIDGenerator](#-uuidgenerator)
