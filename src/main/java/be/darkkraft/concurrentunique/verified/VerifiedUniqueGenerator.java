@@ -28,7 +28,13 @@ import be.darkkraft.concurrentunique.UniqueGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Predicate;
+
 public interface VerifiedUniqueGenerator<T> extends UniqueGenerator<T> {
+
+    static <T> @NotNull VerifiedUniqueGenerator<T> wrap(final @NotNull UniqueGenerator<T> generator, final int maxRetry, final @NotNull Predicate<T> existPredicate) {
+        return new WrappedVerifiedUniqueGenerator<>(generator, maxRetry, existPredicate);
+    }
 
     @Override
     default @Nullable T generate() {

@@ -6,7 +6,7 @@ of identifiers, whatever their type or security and performance requirements.
 
 **Summary**:
 
-- [⚙️ How it works](#%EF%B8%8F-how-does-it-work)
+- [⚙️ How it works](#%EF%B8%8F-how-do-you-use-it)
     - [🏭 RandomGeneratorSupplier](#-randomgeneratorsupplier)
     - [🗂️ Generator Interfaces](#%EF%B8%8F-generator-interfaces)
         - [🆔 UUIDGenerator](#-uuidgenerator)
@@ -170,7 +170,7 @@ final String generated = generator.generate();
 
 ### 🔓 Make custom verified generator
 
-You can use the interface directly to create your own VerifiedUniqueGenerator, or use the default abstract class :
+You can use the interface directly to create your own VerifiedUniqueGenerator, or use the default abstract class:
 
 ```java
 public final class MyVerifiedGenerator extends AbstractVerifiedUniqueGenerator<String> {
@@ -186,6 +186,15 @@ public final class MyVerifiedGenerator extends AbstractVerifiedUniqueGenerator<S
     }
 
 }
+```
+
+Or simply wrapping a predicate:
+
+```java
+final UUIDGenerator generator = UUIDGenerator.build(RandomGeneratorSupplier.Type.SECURE);
+final int maxRetry = 5;
+final UniqueGenerator<UUID> verifiedGenerator =
+        VerifiedUniqueGenerator.wrap(generator, maxRetry, uuid -> this.mySet.contains(uuid));
 ```
 
 # 📄 License
