@@ -24,8 +24,16 @@
 
 package be.darkkraft.concurrentunique;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Function;
+
 public interface UniqueGenerator<T> {
 
     T generate();
+
+    default <R> @NotNull UniqueGenerator<R> map(final @NotNull Function<T, R> function) {
+        return () -> function.apply(this.generate());
+    }
 
 }
