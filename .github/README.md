@@ -18,7 +18,8 @@ of identifiers, whatever their type or security and performance requirements.
         - [🔓 Make Custom Verified Generator](#-make-custom-verified-generator)
 - [📄 License](#-license)
 
-*Note: This project is not particularly designed to be used by anyone but I have made it publicly available anyway.*
+*Note: This project is not particularly designed to be used by anyone but I have made it publicly available anyway.
+As the project is not intended to be maintained, the README may not be up-to-date.*
 
 # ⚙️ How do you use it?
 
@@ -72,7 +73,7 @@ RandomGeneratorSupplier.build(RandomGenerator.of("L32X64MixRandom"));
 ## 🗂️ Generator interfaces
 
 The most important interface is [UniqueGenerator](/src/main/java/be/darkkraft/concurrentunique/UniqueGenerator.java),
-which contains just one method: `UniqueGenerator<T>#generate`.
+which contains just one method to implement: `UniqueGenerator<T>#generate`.
 <br>Then there's
 the [VerifiedUniqueGenerator](/src/main/java/be/darkkraft/concurrentunique/verified/VerifiedUniqueGenerator.java)
 interface, which is a child class of `UniqueGenerator`. Its purpose is to generate an identifier until it is one that
@@ -117,7 +118,7 @@ final long value = generator.generateLong();
 There is an empty generator implementation, mainly for testing purposes.
 
 ```java
-final UniqueGenerator<String> generator = EmptyGenerator.get();
+final UniqueGenerator<String> generator = UniqueGenerator.empty();
 ```
 
 ## 🔒 Make verified generators
