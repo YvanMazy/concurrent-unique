@@ -22,22 +22,33 @@
  * SOFTWARE.
  */
 
-package be.darkkraft.concurrentunique.verified.cache;
+package be.darkkraft.concurrentunique.verified;
 
 import be.darkkraft.concurrentunique.UniqueGenerator;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 
-public final class ConcurrentFullCacheGenerator<T> extends FullCacheGenerator<T> {
+public abstract class AbstractVerifiedGenerator<T> implements VerifiedGenerator<T> {
 
-    public ConcurrentFullCacheGenerator(final @NotNull UniqueGenerator<T> delegate, final int maxRetry) {
-        super(delegate, ConcurrentHashMap.newKeySet(), maxRetry);
+    private final UniqueGenerator<T> generator;
+    private final int maxRetry;
+
+    protected AbstractVerifiedGenerator(final @NotNull UniqueGenerator<T> generator, final int maxRetry) {
+        this.generator = Objects.requireNonNull(generator, "Generator cannot be null");
+        this.maxRetry = maxRetry;
+    }
+
+    @Nullable
+    @Override
+    public final T regenerate() {
+        return this.generator.generate();
     }
 
     @Override
-    public synchronized T generate(final int maxRetry) {
-        return super.generate(maxRetry);
+    public final int getMaxRetry() {
+        return this.maxRetry;
     }
 
 }

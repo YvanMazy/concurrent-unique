@@ -22,37 +22,23 @@
  * SOFTWARE.
  */
 
-package be.darkkraft.concurrentunique.verified;
+package be.darkkraft.concurrentunique;
 
-import be.darkkraft.concurrentunique.UniqueGenerator;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Predicate;
+import java.util.Objects;
+import java.util.function.Function;
 
-public interface VerifiedUniqueGenerator<T> extends UniqueGenerator<T> {
+record ChainedMapGenerator<T, R>(@NotNull UniqueGenerator<T> delegate, @NotNull Function<T, R> function) implements UniqueGenerator<R> {
 
-    static <T> @NotNull VerifiedUniqueGenerator<T> wrap(final @NotNull UniqueGenerator<T> generator, final int maxRetry, final @NotNull Predicate<T> existPredicate) {
-        return new WrappedVerifiedUniqueGenerator<>(generator, maxRetry, existPredicate);
+    ChainedMapGenerator {
+        Objects.requireNonNull(delegate, "delegate must not be null");
+        Objects.requireNonNull(function, "function must not be null");
     }
 
     @Override
-    default @Nullable T generate() {
-        int remaining = Math.max(this.getMaxRetry(), 1);
-        T generated;
-        do {
-            if (--remaining < 0) {
-                return null;
-            }
-            generated = this.regenerate();
-        } while (generated == null || this.isAlreadyExists(generated));
-        return generated;
+    public R generate() {
+        return this.function.apply(this.delegate.generate());
     }
-
-    @Nullable T regenerate();
-
-    boolean isAlreadyExists(final @NotNull T generated);
-
-    int getMaxRetry();
 
 }

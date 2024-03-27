@@ -30,11 +30,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-final class WrappedVerifiedUniqueGenerator<T> extends AbstractVerifiedUniqueGenerator<T> {
+final class WrappedVerifiedGenerator<T> extends AbstractVerifiedGenerator<T> {
 
     private final Predicate<T> existPredicate;
 
-    WrappedVerifiedUniqueGenerator(final @NotNull UniqueGenerator<T> generator, final int maxRetry, final @NotNull Predicate<T> existPredicate) {
+    WrappedVerifiedGenerator(final @NotNull UniqueGenerator<T> generator, final int maxRetry, final @NotNull Predicate<T> existPredicate) {
         super(generator, maxRetry);
         this.existPredicate = Objects.requireNonNull(existPredicate, "Predicate cannot be null");
     }

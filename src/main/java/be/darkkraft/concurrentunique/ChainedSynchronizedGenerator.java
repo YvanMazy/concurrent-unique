@@ -22,18 +22,28 @@
  * SOFTWARE.
  */
 
-package be.darkkraft.concurrentunique.supplier;
+package be.darkkraft.concurrentunique;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.random.RandomGenerator;
+import java.util.Objects;
+import java.util.function.Function;
 
-public final class ThreadLocalRandomGeneratorSupplier implements RandomGeneratorSupplier {
+record ChainedSynchronizedGenerator<T>(@NotNull UniqueGenerator<T> delegate) implements UniqueGenerator<T> {
+
+    ChainedSynchronizedGenerator {
+        Objects.requireNonNull(delegate, "delegate must not be null");
+    }
 
     @Override
-    public @NotNull RandomGenerator getRandomGenerator() {
-        return ThreadLocalRandom.current();
+    public synchronized T generate() {
+        return this.delegate.generate();
+    }
+
+    @Override
+    public synchronized <R> R compute(final @NotNull Function<T, R> function) {
+        final T generated = this.generate();
+        return function.apply(generated);
     }
 
 }

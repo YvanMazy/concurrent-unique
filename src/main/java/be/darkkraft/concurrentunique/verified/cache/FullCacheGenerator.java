@@ -25,22 +25,24 @@
 package be.darkkraft.concurrentunique.verified.cache;
 
 import be.darkkraft.concurrentunique.UniqueGenerator;
-import be.darkkraft.concurrentunique.verified.VerifiedUniqueGenerator;
+import be.darkkraft.concurrentunique.verified.VerifiedGenerator;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Objects;
 import java.util.Set;
 
-abstract sealed class FullCacheGenerator<T> implements VerifiedUniqueGenerator<T> permits ConcurrentFullCacheGenerator, SequentialFullCacheGenerator {
+abstract sealed class FullCacheGenerator<T> implements VerifiedGenerator<T> permits ConcurrentFullCacheGenerator, SequentialFullCacheGenerator {
 
     private final UniqueGenerator<T> delegate;
     private final Set<T> keys;
 
     private int maxRetry;
 
-    FullCacheGenerator(final @NotNull UniqueGenerator<T> delegate, final Set<T> keys, final int maxRetry) {
-        this.delegate = Objects.requireNonNull(delegate, "generator cannot be null");
-        this.keys = keys;
+    FullCacheGenerator(final @NotNull UniqueGenerator<T> delegate, final @NotNull Set<T> keys, final int maxRetry) {
+        this.delegate = Objects.requireNonNull(delegate, "generator must not be null");
+        this.keys = Objects.requireNonNull(keys, "keys must not be null");
         this.maxRetry = maxRetry;
     }
 
@@ -50,8 +52,8 @@ abstract sealed class FullCacheGenerator<T> implements VerifiedUniqueGenerator<T
     }
 
     @Override
-    public T generate() {
-        final T generated = VerifiedUniqueGenerator.super.generate();
+    public T generate(final int maxRetry) {
+        final T generated = VerifiedGenerator.super.generate(maxRetry);
         if (generated != null) {
             this.keys.add(generated);
         }
@@ -76,6 +78,8 @@ abstract sealed class FullCacheGenerator<T> implements VerifiedUniqueGenerator<T
         this.keys.clear();
     }
 
+    @Unmodifiable
+    @Contract(pure = true)
     public @NotNull Set<T> getKeys() {
         return Set.copyOf(this.keys);
     }

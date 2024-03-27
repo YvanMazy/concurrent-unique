@@ -24,9 +24,15 @@
 
 package be.darkkraft.concurrentunique;
 
+import be.darkkraft.concurrentunique.verified.VerifiedGenerator;
+import be.darkkraft.concurrentunique.verified.cache.ConcurrentFullCacheGenerator;
+import be.darkkraft.concurrentunique.verified.cache.SequentialFullCacheGenerator;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public interface UniqueGenerator<T> {
 
@@ -36,8 +42,39 @@ public interface UniqueGenerator<T> {
 
     T generate();
 
+    default <R> R compute(final @NotNull Function<T, R> function) {
+        final T generated = this.generate();
+        return function.apply(generated);
+    }
+
+    @Contract("_ -> new")
     default <R> @NotNull UniqueGenerator<R> map(final @NotNull Function<T, R> function) {
-        return () -> function.apply(this.generate());
+        return new ChainedMapGenerator<>(this, function);
+    }
+
+    @Contract("-> new")
+    default @NotNull UniqueGenerator<T> synchronize() {
+        return new ChainedSynchronizedGenerator<>(this);
+    }
+
+    @Contract("-> new")
+    default @NotNull Stream<T> stream() {
+        return Stream.generate(this::generate);
+    }
+
+    @Contract("_, _ -> new")
+    default @NotNull VerifiedGenerator<T> toVerified(final int maxRetry, final @NotNull Predicate<T> existPredicate) {
+        return VerifiedGenerator.wrap(this, maxRetry, existPredicate);
+    }
+
+    @Contract("_ -> new")
+    default @NotNull VerifiedGenerator<T> toSequentialCacheVerified(final int maxRetry) {
+        return new SequentialFullCacheGenerator<>(this, maxRetry);
+    }
+
+    @Contract("_ -> new")
+    default @NotNull VerifiedGenerator<T> toConcurrentCacheVerified(final int maxRetry) {
+        return new ConcurrentFullCacheGenerator<>(this, maxRetry);
     }
 
 }

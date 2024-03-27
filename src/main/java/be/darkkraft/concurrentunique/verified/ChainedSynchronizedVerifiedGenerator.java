@@ -24,31 +24,42 @@
 
 package be.darkkraft.concurrentunique.verified;
 
-import be.darkkraft.concurrentunique.UniqueGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.function.Function;
 
-public abstract class AbstractVerifiedUniqueGenerator<T> implements VerifiedUniqueGenerator<T> {
+record ChainedSynchronizedVerifiedGenerator<T>(@NotNull VerifiedGenerator<T> delegate) implements VerifiedGenerator<T> {
 
-    private final UniqueGenerator<T> generator;
-    private final int maxRetry;
-
-    protected AbstractVerifiedUniqueGenerator(final @NotNull UniqueGenerator<T> generator, final int maxRetry) {
-        this.generator = Objects.requireNonNull(generator, "Generator cannot be null");
-        this.maxRetry = maxRetry;
-    }
-
-    @Nullable
-    @Override
-    public final T regenerate() {
-        return this.generator.generate();
+    ChainedSynchronizedVerifiedGenerator {
+        Objects.requireNonNull(delegate, "delegate must not be null");
     }
 
     @Override
-    public final int getMaxRetry() {
-        return this.maxRetry;
+    public synchronized T generate() {
+        return this.delegate.generate();
+    }
+
+    @Override
+    public synchronized @Nullable T regenerate() {
+        return this.delegate.regenerate();
+    }
+
+    @Override
+    public synchronized boolean isAlreadyExists(@NotNull final T generated) {
+        return this.delegate.isAlreadyExists(generated);
+    }
+
+    @Override
+    public synchronized <R> R compute(final @NotNull Function<T, R> function) {
+        final T generated = this.generate();
+        return function.apply(generated);
+    }
+
+    @Override
+    public int getMaxRetry() {
+        return this.delegate.getMaxRetry();
     }
 
 }
