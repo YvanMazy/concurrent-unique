@@ -22,12 +22,11 @@
  * SOFTWARE.
  */
 
-package be.darkkraft.concurrentunique.generator;
+package be.darkkraft.concurrentunique;
 
-import be.darkkraft.concurrentunique.UniqueGenerator;
 import org.jetbrains.annotations.Nullable;
 
-public final class EmptyGenerator<T> implements UniqueGenerator<T> {
+final class EmptyGenerator<T> implements UniqueGenerator<T> {
 
     private static final EmptyGenerator<?> INSTANCE = new EmptyGenerator<>();
 
@@ -40,7 +39,7 @@ public final class EmptyGenerator<T> implements UniqueGenerator<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> EmptyGenerator<T> get() {
+    static <T> EmptyGenerator<T> get() {
         return (EmptyGenerator<T>) INSTANCE;
     }
 

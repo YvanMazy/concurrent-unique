@@ -25,7 +25,6 @@
 package be.darkkraft.concurrentunique.verified.cache;
 
 import be.darkkraft.concurrentunique.UniqueGenerator;
-import be.darkkraft.concurrentunique.generator.EmptyGenerator;
 import be.darkkraft.concurrentunique.generator.FakeIntegerGenerator;
 import org.junit.jupiter.api.Test;
 
@@ -59,7 +58,7 @@ class FullCacheGeneratorTest {
 
     @Test
     void testAlwaysNull() {
-        final UniqueGenerator<Integer> generator = new SequentialFullCacheGenerator<>(EmptyGenerator.get(), 4);
+        final UniqueGenerator<Integer> generator = new SequentialFullCacheGenerator<>(UniqueGenerator.empty(), 4);
         for (int i = 0; i < 10; i++) {
             assertNull(generator.generate());
         }

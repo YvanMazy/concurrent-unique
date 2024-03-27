@@ -30,6 +30,10 @@ import java.util.function.Function;
 
 public interface UniqueGenerator<T> {
 
+    static <T> @NotNull UniqueGenerator<T> empty() {
+        return EmptyGenerator.get();
+    }
+
     T generate();
 
     default <R> @NotNull UniqueGenerator<R> map(final @NotNull Function<T, R> function) {
