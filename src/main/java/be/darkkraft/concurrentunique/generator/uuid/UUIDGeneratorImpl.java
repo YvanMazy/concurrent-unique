@@ -30,10 +30,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.UUID;
 
-record UUIDGeneratorImpl(RandomGeneratorSupplier randomGeneratorSupplier) implements UUIDGenerator {
+record UUIDGeneratorImpl(@NotNull RandomGeneratorSupplier randomGeneratorSupplier) implements UUIDGenerator {
 
-    UUIDGeneratorImpl(final @NotNull RandomGeneratorSupplier randomGeneratorSupplier) {
-        this.randomGeneratorSupplier = Objects.requireNonNull(randomGeneratorSupplier, "Random generator supplier cannot be null");
+    UUIDGeneratorImpl {
+        Objects.requireNonNull(randomGeneratorSupplier, "randomGeneratorSupplier must not be null");
     }
 
     @Override

@@ -29,16 +29,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-record AlphanumericGeneratorImpl(int length, RandomGeneratorSupplier randomGeneratorSupplier) implements AlphanumericGenerator {
+record AlphanumericGeneratorImpl(int length, @NotNull RandomGeneratorSupplier randomGeneratorSupplier) implements AlphanumericGenerator {
 
     private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    AlphanumericGeneratorImpl(final int length, final RandomGeneratorSupplier randomGeneratorSupplier) {
+    AlphanumericGeneratorImpl {
         if (length <= 0) {
-            throw new IllegalArgumentException("Invalid string length: " + length);
+            throw new IllegalArgumentException("String length must be positive: " + length);
         }
-        this.length = length;
-        this.randomGeneratorSupplier = Objects.requireNonNull(randomGeneratorSupplier, "Random generator supplier cannot be null");
+        Objects.requireNonNull(randomGeneratorSupplier, "Random generator supplier cannot be null");
     }
 
     @Override
