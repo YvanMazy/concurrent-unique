@@ -24,19 +24,25 @@
 
 package be.darkkraft.concurrentunique.supplier;
 
+import be.darkkraft.concurrentunique.random.SequentialSeedRandom;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.security.SecureRandom;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 import java.util.random.RandomGenerator;
 
 public interface RandomGeneratorSupplier {
 
-    static RandomGeneratorSupplier build(final Type type) {
-        return Objects.requireNonNull(type, "Type cannot be null").build();
+    @Contract("_ -> new")
+    static @NotNull RandomGeneratorSupplier build(final @NotNull Type type) {
+        return Objects.requireNonNull(type, "type must not be null").build();
     }
 
-    static WrappedGeneratorSupplier build(final @NotNull RandomGenerator randomGenerator) {
+    @Contract("_ -> new")
+    static @NotNull RandomGeneratorSupplier wrap(final @NotNull RandomGenerator randomGenerator) {
         return new WrappedGeneratorSupplier(randomGenerator);
     }
 
@@ -44,14 +50,14 @@ public interface RandomGeneratorSupplier {
 
     enum Type {
 
-        FAST_SEQUENTIAL(FastSequentialRandomGeneratorSupplier::new),
-        SECURE(SecureRandomGeneratorSupplier::new),
-        THREAD_LOCAL(ThreadLocalRandomGeneratorSupplier::new);
+        FAST_SEQUENTIAL(() -> wrap(new SequentialSeedRandom())),
+        SECURE(() -> wrap(new SecureRandom())),
+        THREAD_LOCAL(() -> wrap(ThreadLocalRandom.current()));
 
         private final Supplier<RandomGeneratorSupplier> supplier;
 
-        Type(final Supplier<RandomGeneratorSupplier> supplier) {
-            this.supplier = supplier;
+        Type(final @NotNull Supplier<RandomGeneratorSupplier> supplier) {
+            this.supplier = Objects.requireNonNull(supplier, "supplier must not be null");
         }
 
         private RandomGeneratorSupplier build() {

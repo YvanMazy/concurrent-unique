@@ -29,21 +29,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 import java.util.random.RandomGenerator;
 
-public class WrappedGeneratorSupplier implements RandomGeneratorSupplier {
+record WrappedGeneratorSupplier(@NotNull RandomGenerator randomGenerator) implements RandomGeneratorSupplier {
 
-    private RandomGenerator randomGenerator;
-
-    public WrappedGeneratorSupplier(final @NotNull RandomGenerator randomGenerator) {
-        this.randomGenerator = Objects.requireNonNull(randomGenerator, "Random generator cannot be null");
+    WrappedGeneratorSupplier {
+        Objects.requireNonNull(randomGenerator, "Random generator cannot be null");
     }
 
     @Override
     public @NotNull RandomGenerator getRandomGenerator() {
         return this.randomGenerator;
-    }
-
-    public void setRandomGenerator(final @NotNull RandomGenerator randomGenerator) {
-        this.randomGenerator = Objects.requireNonNull(randomGenerator, "Random generator cannot be null");
     }
 
 }

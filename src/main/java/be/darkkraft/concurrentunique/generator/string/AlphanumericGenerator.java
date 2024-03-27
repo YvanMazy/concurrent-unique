@@ -33,11 +33,11 @@ import java.util.random.RandomGenerator;
 public interface AlphanumericGenerator extends UniqueGenerator<String> {
 
     static AlphanumericGenerator build(final int length, final @NotNull RandomGeneratorSupplier.Type type) {
-        return new AlphanumericGeneratorImpl(length, RandomGeneratorSupplier.build(type));
+        return build(length, RandomGeneratorSupplier.build(type));
     }
 
     static AlphanumericGenerator build(final int length, final @NotNull RandomGenerator randomGenerator) {
-        return build(length, RandomGeneratorSupplier.build(randomGenerator));
+        return build(length, RandomGeneratorSupplier.wrap(randomGenerator));
     }
 
     static AlphanumericGenerator build(final int length, final @NotNull RandomGeneratorSupplier supplier) {

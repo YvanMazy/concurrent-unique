@@ -34,11 +34,11 @@ import java.util.random.RandomGenerator;
 public interface UUIDGenerator extends UniqueGenerator<UUID> {
 
     static UUIDGenerator build(final @NotNull RandomGeneratorSupplier.Type type) {
-        return new UUIDGeneratorImpl(RandomGeneratorSupplier.build(type));
+        return build(RandomGeneratorSupplier.build(type));
     }
 
     static UUIDGenerator build(final @NotNull RandomGenerator randomGenerator) {
-        return build(RandomGeneratorSupplier.build(randomGenerator));
+        return build(RandomGeneratorSupplier.wrap(randomGenerator));
     }
 
     static UUIDGenerator build(final @NotNull RandomGeneratorSupplier supplier) {
