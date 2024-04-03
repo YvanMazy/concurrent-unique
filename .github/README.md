@@ -194,8 +194,7 @@ Or simply wrapping a predicate:
 ```java
 final UUIDGenerator generator = UUIDGenerator.build(RandomGeneratorSupplier.Type.SECURE);
 final int maxRetry = 5;
-final UniqueGenerator<UUID> verifiedGenerator =
-        VerifiedUniqueGenerator.wrap(generator, maxRetry, uuid -> this.mySet.contains(uuid));
+final UniqueGenerator<UUID> verifiedGenerator = generator.toVerified(maxRetry, uuid -> this.mySet.contains(uuid));
 ```
 
 # 📄 License
