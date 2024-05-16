@@ -25,7 +25,7 @@ As the project is not intended to be maintained, the README may not be up-to-dat
 
 To use the project as a dependency, you can add it using [Maven](https://maven.apache.org/)
 or [Gradle](https://gradle.org/).
-<br>**Last version**: [![Release](https://jitpack.io/v/Darkkraft/concurrent-unique.svg)](https://jitpack.io/#Darkkraft/concurrent-unique)
+<br>**Last version**: [![Release](https://jitpack.io/v/YvanMazy/concurrent-unique.svg)](https://jitpack.io/#YvanMazy/concurrent-unique)
 
 ```groovy
 repositories {
@@ -33,7 +33,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.Darkkraft:concurrent-unique:VERSION'
+    implementation 'com.github.YvanMazy:concurrent-unique:VERSION'
 }
 ```
 
@@ -47,7 +47,7 @@ dependencies {
 
 <dependencies>
     <dependency>
-        <groupId>com.github.Darkkraft</groupId>
+        <groupId>com.github.YvanMazy</groupId>
         <artifactId>concurrent-unique</artifactId>
         <version>VERSION</version>
     </dependency>
